@@ -17,10 +17,12 @@ public final class SessionStorage {
     private static final String HEADER = "id\tsubject\tdate\tdurationMinutes\tnote";
     private final Path file;
 
+    /** Creates storage backed by the specified file. */
     public SessionStorage(Path file) {
         this.file = file;
     }
 
+    /** Loads saved sessions, returning an empty list when no data file exists. */
     public List<StudySession> load() throws IOException {
         if (Files.notExists(file)) {
             return List.of();
@@ -42,6 +44,7 @@ public final class SessionStorage {
         return sessions;
     }
 
+    /** Saves every supplied session, replacing the previous data file. */
     public void save(List<StudySession> sessions) throws IOException {
         List<String> lines = new ArrayList<>();
         lines.add(HEADER);

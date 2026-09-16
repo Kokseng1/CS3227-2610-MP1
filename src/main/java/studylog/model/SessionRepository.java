@@ -12,14 +12,17 @@ import java.util.stream.Collectors;
 public final class SessionRepository {
     private final List<StudySession> sessions;
 
+    /** Creates a repository containing a defensive copy of the supplied sessions. */
     public SessionRepository(List<StudySession> initialSessions) {
         sessions = new ArrayList<>(initialSessions);
     }
 
+    /** Adds a session to the repository. */
     public void add(StudySession session) {
         sessions.add(session);
     }
 
+    /** Removes the session with the given identifier, if it exists. */
     public boolean remove(UUID id) {
         return sessions.removeIf(session -> session.id().equals(id));
     }
@@ -35,12 +38,14 @@ public final class SessionRepository {
         return false;
     }
 
+    /** Returns every session, sorted newest first. */
     public List<StudySession> all() {
         return sessions.stream()
                 .sorted(Comparator.comparing(StudySession::date).reversed())
                 .toList();
     }
 
+    /** Returns all sessions for a subject, or every session for the all-subjects choice. */
     public List<StudySession> matchingSubject(String subject) {
         return matching(subject, null, null);
     }
@@ -57,19 +62,23 @@ public final class SessionRepository {
                 .toList();
     }
 
+    /** Returns each recorded subject once, in alphabetical order. */
     public List<String> subjects() {
         return sessions.stream().map(StudySession::subject).distinct().sorted().toList();
     }
 
+    /** Returns the duration of every session in minutes. */
     public int totalMinutes() {
         return sessions.stream().mapToInt(StudySession::durationMinutes).sum();
     }
 
+    /** Returns the duration of sessions on or after a given date, in minutes. */
     public int totalMinutesSince(LocalDate startInclusive) {
         return sessions.stream().filter(session -> !session.date().isBefore(startInclusive))
                 .mapToInt(StudySession::durationMinutes).sum();
     }
 
+    /** Returns the total recorded minutes for each subject. */
     public Map<String, Integer> totalsBySubject() {
         return sessions.stream().collect(Collectors.groupingBy(StudySession::subject,
                 Collectors.summingInt(StudySession::durationMinutes)));

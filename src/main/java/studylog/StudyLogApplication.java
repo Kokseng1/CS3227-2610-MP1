@@ -55,6 +55,7 @@ public final class StudyLogApplication {
         repository = new SessionRepository(loadSessions());
     }
 
+    /** Starts the StudyLog application on Swing's event-dispatch thread. */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new StudyLogApplication().show());
     }

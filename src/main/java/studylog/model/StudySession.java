@@ -21,6 +21,7 @@ public record StudySession(UUID id, String subject, LocalDate date, int duration
         }
     }
 
+    /** Creates a session with a newly generated identifier. */
     public StudySession(String subject, LocalDate date, int durationMinutes, String note) {
         this(UUID.randomUUID(), subject.trim(), date, durationMinutes, note.trim());
     }
